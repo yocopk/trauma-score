@@ -15,7 +15,6 @@ import { traumaData } from "./data/traumaData";
 import {
   ArrowLeft,
   ArrowRight,
-  Target,
   Copy,
   X,
   Share,
@@ -423,7 +422,6 @@ function App() {
                 ) : (
                   <>
                     Vedi Risultato
-                    <Target className="w-5 h-5" />
                   </>
                 )}
               </button>
