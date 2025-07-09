@@ -1,17 +1,10 @@
-/*
-  Obiettivo: TraumaScore app single player
-  Stack: React + Vite, TailwindCSS, Mobile First
-  Features:
-    - Lista categorie con checkbox + punteggio
-    - Navigazione step by step tra categorie
-    - Punteggio totale al termine + frase ironica
-    - UI mobile friendly (max 1 colonna, testo leggibile)
-    - Possibile uso di useState per score tracking
-    - Facoltativo: localStorage per persistenza selezioni
-*/
-
 import { useState } from "react";
 import { traumaData } from "./data/traumaData";
+import {
+  saveQuizResult,
+  getAverageScore,
+  type QuizAnswer,
+} from "./firebase/database";
 import {
   ArrowLeft,
   ArrowRight,
@@ -85,6 +78,8 @@ function App() {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [totalScore, setTotalScore] = useState(0);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [averageScore, setAverageScore] = useState<number | null>(null);
 
   const handleItemToggle = (itemId: string, points: number) => {
     const newSelected = new Set(selectedItems);
@@ -98,14 +93,50 @@ function App() {
     setSelectedItems(newSelected);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     // Scroll verso l'alto della pagina
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     if (currentCategoryIndex < traumaData.length - 1) {
       setCurrentCategoryIndex((prev) => prev + 1);
     } else {
-      setCurrentStep("results");
+      // Quiz completato - mostra loading
+      setIsLoading(true);
+
+      try {
+        const answers: QuizAnswer[] = [];
+
+        // Raccogli tutte le risposte selezionate
+        traumaData.forEach((category) => {
+          category.items.forEach((item) => {
+            if (selectedItems.has(item.id)) {
+              answers.push({
+                itemId: item.id,
+                categoryId: category.id,
+                text: item.text,
+                points: item.points,
+              });
+            }
+          });
+        });
+
+        // Salva su Firestore e calcola la media
+        await saveQuizResult(answers, totalScore);
+        console.log("Quiz salvato con successo!");
+
+        // Calcola la media di tutti i punteggi
+        const average = await getAverageScore();
+        setAverageScore(average);
+      } catch (error) {
+        console.error(
+          "Errore nel salvare il quiz o calcolare la media:",
+          error
+        );
+        // Continua comunque alla pagina dei risultati anche se qualcosa fallisce
+      } finally {
+        setIsLoading(false);
+        setCurrentStep("results");
+      }
     }
   };
 
@@ -123,6 +154,7 @@ function App() {
     setCurrentCategoryIndex(0);
     setSelectedItems(new Set());
     setTotalScore(0);
+    setAverageScore(null);
   };
 
   const generateShareText = () => {
@@ -229,6 +261,24 @@ function App() {
   }
 
   if (currentStep === "results") {
+    if (isLoading) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-purple-900 to-indigo-900 flex flex-col items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-md mx-auto shadow-2xl">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
+              <h2 className="text-2xl font-bold text-purple-900 mb-2">
+                Elaborazione risultati...
+              </h2>
+              <p className="text-gray-600">
+                Stiamo salvando i tuoi dati e calcolando le statistiche
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <>
         <div className="min-h-screen bg-gradient-to-br from-purple-900 to-indigo-900 flex flex-col items-center justify-center p-4">
@@ -240,6 +290,30 @@ function App() {
               <div className="text-6xl font-bold text-purple-600 mb-4">
                 {totalScore}
               </div>
+
+              {/* Sezione media */}
+              {averageScore !== null && (
+                <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl p-4 mb-4 border-2 border-purple-200">
+                  <div className="text-sm text-purple-600 mb-1 font-medium">
+                    📊 Confronto con gli altri danneggiati
+                  </div>
+                  <div className="text-2xl font-bold text-purple-700 mb-2">
+                    Media: {averageScore}
+                  </div>
+                  <div className="text-sm text-purple-600">
+                    {totalScore > averageScore
+                      ? `Complimenti! Sei +${
+                          totalScore - averageScore
+                        } punti più traumatizzato della media! 🏆`
+                      : totalScore < averageScore
+                      ? `Tranquillo, ti mancano solo ${
+                          averageScore - totalScore
+                        } punti per raggiungere la media dei traumi! 🎯`
+                      : "Sei perfettamente nella media del trauma! Che coincidenza! ✨"}
+                  </div>
+                </div>
+              )}
+
               <p className="text-gray-600 text-lg mb-6 leading-relaxed">
                 {getScoreMessage(totalScore)}
               </p>
@@ -388,9 +462,6 @@ function App() {
               />
             </div>
           </div>
-          <div className="text-purple-200 text-sm mt-2">
-            Score attuale: {totalScore}
-          </div>
         </div>
 
         {/* Category */}
@@ -414,9 +485,6 @@ function App() {
                 <div className="flex-1">
                   <span className="text-gray-800 leading-relaxed">
                     {item.text}
-                  </span>
-                  <span className="text-purple-600 font-semibold ml-2">
-                    (+{item.points})
                   </span>
                 </div>
               </label>
