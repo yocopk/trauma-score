@@ -19,6 +19,7 @@ import {
   X,
   Share,
   RotateCcw,
+  Target,
 } from "lucide-react";
 
 const getScoreMessage = (score: number): string => {
@@ -78,6 +79,9 @@ function App() {
   };
 
   const handleNext = () => {
+    // Scroll verso l'alto della pagina
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
     if (currentCategoryIndex < traumaData.length - 1) {
       setCurrentCategoryIndex((prev) => prev + 1);
     } else {
@@ -86,6 +90,9 @@ function App() {
   };
 
   const handleBack = () => {
+    // Scroll verso l'alto della pagina
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
     if (currentCategoryIndex > 0) {
       setCurrentCategoryIndex((prev) => prev - 1);
     }
@@ -420,9 +427,7 @@ function App() {
                     <ArrowRight className="w-5 h-5" />
                   </>
                 ) : (
-                  <>
-                    Vedi Risultato
-                  </>
+                  <>Vedi Risultato</>
                 )}
               </button>
             </div>

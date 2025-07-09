@@ -52,6 +52,11 @@ export const traumaData: Category[] = [
         text: "Famiglia gravemente disfunzionale",
         points: 9,
       },
+      {
+        id: "assistito-tradimento-genitore",
+        text: "Hai assistito al tradimento di uno dei tuoi genitori",
+        points: 15,
+      },
     ],
   },
   {
@@ -81,6 +86,21 @@ export const traumaData: Category[] = [
       { id: "matrimonio-fallito", text: "Matrimonio finito male", points: 8 },
       { id: "aborto-traumatico", text: "Aborto traumatico", points: 12 },
       { id: "infertilita", text: "Problemi di infertilità", points: 8 },
+      {
+        id: "relazione-segreta",
+        text: "Relazione segreta durata anni",
+        points: 6,
+      },
+      {
+        id: "amante-sposato",
+        text: "Sei stato l'amante di una persona sposata",
+        points: 7,
+      },
+      {
+        id: "abbandonato-gravidanza",
+        text: "Abbandonato/a durante la gravidanza",
+        points: 12,
+      },
     ],
   },
   {
@@ -128,6 +148,21 @@ export const traumaData: Category[] = [
         text: "Isolamento sociale prolungato",
         points: 8,
       },
+      {
+        id: "sindrome-impostore",
+        text: "Sindrome dell'impostore invalidante",
+        points: 5,
+      },
+      {
+        id: "perfezionismo-tossico",
+        text: "Perfezionismo tossico che ti ha rovinato",
+        points: 6,
+      },
+      {
+        id: "dismorfia-corporea",
+        text: "Dismorfia corporea/odio per il proprio corpo",
+        points: 8,
+      },
     ],
   },
   {
@@ -156,6 +191,16 @@ export const traumaData: Category[] = [
         points: 8,
       },
       { id: "dolore-cronico", text: "Dolore cronico invalidante", points: 10 },
+      {
+        id: "operazione-estetica-fallita",
+        text: "Operazione estetica andata male",
+        points: 8,
+      },
+      {
+        id: "dipendenza-farmaci",
+        text: "Dipendenza da farmaci prescritti",
+        points: 9,
+      },
     ],
   },
   {
@@ -207,6 +252,16 @@ export const traumaData: Category[] = [
         text: "Perdita della casa/sfratto",
         points: 7,
       },
+      {
+        id: "morte-durante-evento",
+        text: "Qualcuno è morto durante un evento importante per te",
+        points: 10,
+      },
+      {
+        id: "perdita-oggetto-importante",
+        text: "Perdita di oggetto/ricordo insostituibile",
+        points: 4,
+      },
     ],
   },
   {
@@ -245,6 +300,16 @@ export const traumaData: Category[] = [
         id: "lavoro-usurante",
         text: "Lavoro fisicamente/mentalmente usurante",
         points: 5,
+      },
+      {
+        id: "truffa-finanziaria",
+        text: "Vittima di truffa/raggiro finanziario",
+        points: 8,
+      },
+      {
+        id: "famiglia-contro-lavoro",
+        text: "Famiglia contraria alla tua carriera/sogni",
+        points: 6,
       },
     ],
   },
@@ -306,6 +371,31 @@ export const traumaData: Category[] = [
       {
         id: "coming-out-traumatico",
         text: "Coming out andato molto male",
+        points: 8,
+      },
+      {
+        id: "social-media-trauma",
+        text: "Umiliazione pubblica sui social media",
+        points: 6,
+      },
+      {
+        id: "gaslighting-prolungato",
+        text: "Gaslighting prolungato da parte di qualcuno",
+        points: 9,
+      },
+      {
+        id: "catfish",
+        text: "Sei stato vittima di catfish",
+        points: 5,
+      },
+      {
+        id: "revenge-porn",
+        text: "Revenge porn o ricatto con foto/video",
+        points: 12,
+      },
+      {
+        id: "abuso-di-fiducia",
+        text: "Grave abuso di fiducia da persona cara",
         points: 8,
       },
     ],
