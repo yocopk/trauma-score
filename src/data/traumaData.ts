@@ -62,6 +62,21 @@ export const traumaData: Category[] = [
         text: "Hai cresciuto tuo fratello o sorella",
         points: 8,
       },
+      {
+        id: "adozione-traumatica",
+        text: "Adozione o affidamento traumatico",
+        points: 10,
+      },
+      {
+        id: "cambiato-molte-case",
+        text: "Hai cambiato molte case da bambino",
+        points: 5,
+      },
+      {
+        id: "senza-casa-propria",
+        text: "Sei stato senza una casa stabile per lunghi periodi",
+        points: 8,
+      },
     ],
   },
   {
@@ -105,6 +120,21 @@ export const traumaData: Category[] = [
         id: "abbandonato-gravidanza",
         text: "Abbandonato/a durante la gravidanza",
         points: 12,
+      },
+      {
+        id: "matrimonio-forzato",
+        text: "Matrimonio combinato/forzato",
+        points: 15,
+      },
+      {
+        id: "relazione-con-grande-differenza-eta",
+        text: "Relazione con grande differenza di età da giovane",
+        points: 8,
+      },
+      {
+        id: "scoperto-bugie-importanti",
+        text: "Hai scoperto bugie importanti sulla tua vita",
+        points: 9,
       },
     ],
   },
@@ -173,6 +203,21 @@ export const traumaData: Category[] = [
         text: "Stress emotivo cronico prolungato",
         points: 6,
       },
+      {
+        id: "episodi-dissociativi",
+        text: "Episodi di dissociazione/derealizzazione",
+        points: 8,
+      },
+      {
+        id: "insonnia-cronica",
+        text: "Insonnia cronica per traumi",
+        points: 5,
+      },
+      {
+        id: "fobie-invalidanti",
+        text: "Fobie che limitano gravemente la vita",
+        points: 7,
+      },
     ],
   },
   {
@@ -220,6 +265,16 @@ export const traumaData: Category[] = [
         id: "cicatrice-evidente",
         text: "Hai una cicatrice evidente per un motivo particolare",
         points: 9,
+      },
+      {
+        id: "problemi-alimentazione",
+        text: "Problemi gravi di alimentazione non diagnosticati",
+        points: 6,
+      },
+      {
+        id: "overdose-accidentale",
+        text: "Overdose accidentale o avvelenamento",
+        points: 12,
       },
     ],
   },
@@ -282,6 +337,26 @@ export const traumaData: Category[] = [
         text: "Perdita di oggetto/ricordo insostituibile",
         points: 4,
       },
+      {
+        id: "perdita-lavoro-sogni",
+        text: "Perdita del lavoro dei tuoi sogni",
+        points: 6,
+      },
+      {
+        id: "emigrazione-forzata",
+        text: "Emigrazione forzata/fuga dal paese",
+        points: 12,
+      },
+      {
+        id: "sfratto-traumatico",
+        text: "Sfratto improvviso e traumatico",
+        points: 9,
+      },
+      {
+        id: "vivere-ospite-lungo",
+        text: "Hai vissuto da ospite per lunghi periodi senza privacy",
+        points: 6,
+      },
     ],
   },
   {
@@ -330,6 +405,16 @@ export const traumaData: Category[] = [
         id: "famiglia-contro-lavoro",
         text: "Famiglia contraria alla tua carriera/sogni",
         points: 6,
+      },
+      {
+        id: "lavoro-illegale-forzato",
+        text: "Costretto a lavoro illegale o immorale",
+        points: 10,
+      },
+      {
+        id: "carriera-distrutta-scandalo",
+        text: "Carriera distrutta da scandalo/gossip",
+        points: 8,
       },
     ],
   },
@@ -417,6 +502,46 @@ export const traumaData: Category[] = [
         id: "abuso-di-fiducia",
         text: "Grave abuso di fiducia da persona cara",
         points: 8,
+      },
+      {
+        id: "identita-rubata",
+        text: "Furto di identità o documenti",
+        points: 7,
+      },
+      {
+        id: "ricattato-segreti",
+        text: "Ricattato per segreti personali",
+        points: 9,
+      },
+      {
+        id: "isolamento-punizione",
+        text: "Isolamento forzato come punizione",
+        points: 8,
+      },
+      {
+        id: "tradito-gruppo-amici",
+        text: "Tradito da tutto il gruppo di amici",
+        points: 7,
+      },
+      {
+        id: "pubblicamente-umiliato",
+        text: "Pubblicamente umiliato in modo grave",
+        points: 8,
+      },
+      {
+        id: "cambiato-case-molte-volte",
+        text: "Hai dovuto cambiare casa molte volte",
+        points: 5,
+      },
+      {
+        id: "dormito-macchina-strada",
+        text: "Hai dormito in macchina o per strada",
+        points: 10,
+      },
+      {
+        id: "convivenza-forzata",
+        text: "Convivenza forzata in spazi angusti senza privacy",
+        points: 7,
       },
     ],
   },
