@@ -57,6 +57,11 @@ export const traumaData: Category[] = [
         text: "Hai assistito al tradimento di uno dei tuoi genitori",
         points: 15,
       },
+      {
+        id: "cresciuto-fratello-sorella",
+        text: "Hai cresciuto tuo fratello o sorella",
+        points: 8,
+      },
     ],
   },
   {
@@ -163,6 +168,11 @@ export const traumaData: Category[] = [
         text: "Dismorfia corporea/odio per il proprio corpo",
         points: 8,
       },
+      {
+        id: "stress-emotivo-cronico",
+        text: "Stress emotivo cronico prolungato",
+        points: 6,
+      },
     ],
   },
   {
@@ -199,6 +209,16 @@ export const traumaData: Category[] = [
       {
         id: "dipendenza-farmaci",
         text: "Dipendenza da farmaci prescritti",
+        points: 9,
+      },
+      {
+        id: "stress-fisico-cronico",
+        text: "Stress fisico cronico che ha danneggiato la salute",
+        points: 7,
+      },
+      {
+        id: "cicatrice-evidente",
+        text: "Hai una cicatrice evidente per un motivo particolare",
         points: 9,
       },
     ],

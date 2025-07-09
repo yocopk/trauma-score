@@ -46,12 +46,32 @@ const getScoreMessage = (score: number): string => {
       return "Sei un sopravvissuto professionista 🏆";
     case score <= 100:
       return "Ok, forse è ora di chiamare un terapeuta... o cinque 🧠";
+    case score <= 110:
+      return "Livello 'Ho visto cose che voi umani...' raggiunto 👁️";
     case score <= 120:
       return "Plot armor activated! Come fai ad essere ancora qui? 🛡️";
+    case score <= 130:
+      return "Sei diventato immune al dolore per pura abitudine 💉";
+    case score <= 140:
+      return "Il trauma ti ha dato superpoteri, evidentemente 🦸‍♂️";
     case score <= 150:
       return "Sei letteralmente un anime protagonist. Rispetto! 🔥";
+    case score <= 160:
+      return "A questo punto il trauma è il tuo spirit animal 🐺";
+    case score <= 170:
+      return "Hai collezionato traumi come fossero Pokemon 🎮";
+    case score <= 180:
+      return "Il tuo CV di sopravvivenza è impressionante 📜";
+    case score <= 190:
+      return "Sei la definizione vivente di 'character development' 📖";
     case score <= 200:
       return "A questo punto sei immortale per puro dispetto 😈";
+    case score <= 220:
+      return "Hai raggiunto l'illuminazione tramite sofferenza 🧘‍♂️";
+    case score <= 250:
+      return "Sei diventato una leggenda metropolitana 🏛️";
+    case score <= 300:
+      return "Il trauma ti deve dei soldi a questo punto 💸";
     default:
       return "Hai sbloccato il trauma infinito. Achievement unlocked! 🏅✨";
   }
