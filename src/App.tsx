@@ -12,6 +12,15 @@
 
 import { useState } from "react";
 import { traumaData } from "./data/traumaData";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Target,
+  Copy,
+  X,
+  Share,
+  RotateCcw,
+} from "lucide-react";
 
 const getScoreMessage = (score: number): string => {
   switch (true) {
@@ -74,6 +83,12 @@ function App() {
       setCurrentCategoryIndex((prev) => prev + 1);
     } else {
       setCurrentStep("results");
+    }
+  };
+
+  const handleBack = () => {
+    if (currentCategoryIndex > 0) {
+      setCurrentCategoryIndex((prev) => prev - 1);
     }
   };
 
@@ -205,15 +220,17 @@ function App() {
               <div className="space-y-3">
                 <button
                   onClick={handleShare}
-                  className="w-full bg-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  className="w-full bg-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
                 >
-                  📱 Condividi Risultato {showShareModal ? "(APERTA)" : ""}
+                  <Share className="w-5 h-5" />
+                  Condividi Risultato {showShareModal ? "(APERTA)" : ""}
                 </button>
                 <button
                   onClick={handleRestart}
-                  className="w-full bg-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  className="w-full bg-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
                 >
-                  🔄 Ricomincia
+                  <RotateCcw className="w-5 h-5" />
+                  Ricomincia
                 </button>
               </div>
             </div>
@@ -235,14 +252,15 @@ function App() {
               {/* Header della modale */}
               <div className="p-6 border-b border-gray-200">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-xl font-bold text-purple-900">
-                    📊 Il tuo risultato
+                  <h3 className="text-xl font-bold text-purple-900 flex items-center gap-2">
+                    <Target className="w-5 h-5" />
+                    Il tuo risultato
                   </h3>
                   <button
                     onClick={() => setShowShareModal(false)}
-                    className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                    className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
                   >
-                    ×
+                    <X className="w-6 h-6" />
                   </button>
                 </div>
               </div>
@@ -250,8 +268,9 @@ function App() {
               {/* Contenuto scrollabile */}
               <div className="flex-1 overflow-y-auto p-6">
                 <div className="text-center mb-6">
-                  <div className="text-4xl font-bold text-purple-600 mb-2">
-                    🎯 {totalScore}
+                  <div className="text-4xl font-bold text-purple-600 mb-2 flex items-center justify-center gap-2">
+                    <Target className="w-8 h-8" />
+                    {totalScore}
                   </div>
                   <p className="text-gray-600 text-sm italic">
                     {getScoreMessage(totalScore)}
@@ -301,14 +320,16 @@ function App() {
                 <div className="space-y-3">
                   <button
                     onClick={copyToClipboard}
-                    className="w-full bg-green-600 text-white py-3 rounded-full font-semibold hover:bg-green-700 transition-colors duration-200"
+                    className="w-full bg-green-600 text-white py-3 rounded-full font-semibold hover:bg-green-700 transition-colors duration-200 flex items-center justify-center gap-2"
                   >
-                    📋 Copia Risultato
+                    <Copy className="w-5 h-5" />
+                    Copia Risultato
                   </button>
                   <button
                     onClick={() => setShowShareModal(false)}
-                    className="w-full bg-gray-300 text-gray-700 py-3 rounded-full font-semibold hover:bg-gray-400 transition-colors duration-200"
+                    className="w-full bg-gray-300 text-gray-700 py-3 rounded-full font-semibold hover:bg-gray-400 transition-colors duration-200 flex items-center justify-center gap-2"
                   >
+                    <X className="w-5 h-5" />
                     Chiudi
                   </button>
                 </div>
@@ -376,14 +397,38 @@ function App() {
             ))}
           </div>
 
-          <button
-            onClick={handleNext}
-            className="w-full mt-8 bg-purple-600 text-white py-4 rounded-full font-semibold text-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
-          >
-            {currentCategoryIndex < traumaData.length - 1
-              ? "Avanti"
-              : "Vedi Risultato"}
-          </button>
+          <div className="space-y-4 mt-8">
+            {/* Pulsanti di navigazione */}
+            <div className="flex space-x-3">
+              {currentCategoryIndex > 0 && (
+                <button
+                  onClick={handleBack}
+                  className="flex-1 bg-gray-500 text-white py-4 rounded-full font-semibold text-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                  Indietro
+                </button>
+              )}
+              <button
+                onClick={handleNext}
+                className={`${
+                  currentCategoryIndex > 0 ? "flex-1" : "w-full"
+                } bg-purple-600 text-white py-4 rounded-full font-semibold text-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2`}
+              >
+                {currentCategoryIndex < traumaData.length - 1 ? (
+                  <>
+                    Avanti
+                    <ArrowRight className="w-5 h-5" />
+                  </>
+                ) : (
+                  <>
+                    Vedi Risultato
+                    <Target className="w-5 h-5" />
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
