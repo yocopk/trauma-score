@@ -61,3 +61,14 @@ export async function getAverageScore(): Promise<number | null> {
     throw error;
   }
 }
+
+export async function getTotalParticipants(): Promise<number> {
+  try {
+    const q = query(collection(db, "quiz-results"));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.size;
+  } catch (error) {
+    console.error("Error getting total participants: ", error);
+    return 0;
+  }
+}

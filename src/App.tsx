@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { traumaData } from "./data/traumaData";
 import {
   saveQuizResult,
   getAverageScore,
+  getTotalParticipants,
   type QuizAnswer,
 } from "./firebase/database";
 import {
@@ -70,6 +71,33 @@ const getScoreMessage = (score: number): string => {
   }
 };
 
+const getParticipantsMessage = (count: number): string => {
+  switch (true) {
+    case count === 0:
+      return "Sii il primo coraggioso a scoprire il tuo trauma score! 🏆";
+    case count === 1:
+      return "1 persona ha già scoperto quanto è danneggiata 😅";
+    case count <= 5:
+      return `${count} persone hanno già confessato i loro traumi 🤝`;
+    case count <= 10:
+      return `${count} anime coraggiose si sono già messe a nudo 💪`;
+    case count <= 25:
+      return `${count} danneggiati si sono già uniti al club! 🎭`;
+    case count <= 50:
+      return `${count} persone hanno già scoperto di essere più traumatizzate di quanto pensassero 😱`;
+    case count <= 100:
+      return `${count} sopravvissuti hanno già condiviso le loro cicatrici 🏅`;
+    case count <= 250:
+      return `${count} guerrieri del trauma si sono già fatti avanti! ⚔️`;
+    case count <= 500:
+      return `${count} leggende del trauma hanno già lasciato il segno 🔥`;
+    case count <= 1000:
+      return `${count} eroi danneggiati nella nostra hall of fame! 🏛️`;
+    default:
+      return `${count} persone hanno già scoperto il loro livello di trauma. Unisciti all'esercito dei danneggiati! 🚀`;
+  }
+};
+
 function App() {
   const [currentStep, setCurrentStep] = useState<
     "welcome" | "quiz" | "results"
@@ -80,6 +108,22 @@ function App() {
   const [showShareModal, setShowShareModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [averageScore, setAverageScore] = useState<number | null>(null);
+  const [totalParticipants, setTotalParticipants] = useState<number | null>(
+    null
+  );
+
+  // Carica il numero di partecipanti all'avvio
+  useEffect(() => {
+    const loadParticipants = async () => {
+      try {
+        const count = await getTotalParticipants();
+        setTotalParticipants(count);
+      } catch (error) {
+        console.error("Errore nel caricare i partecipanti:", error);
+      }
+    };
+    loadParticipants();
+  }, []);
 
   const handleItemToggle = (itemId: string, points: number) => {
     const newSelected = new Set(selectedItems);
@@ -127,6 +171,10 @@ function App() {
         // Calcola la media di tutti i punteggi
         const average = await getAverageScore();
         setAverageScore(average);
+
+        // Aggiorna il contatore dei partecipanti
+        const newCount = await getTotalParticipants();
+        setTotalParticipants(newCount);
       } catch (error) {
         console.error(
           "Errore nel salvare il quiz o calcolare la media:",
@@ -245,10 +293,27 @@ function App() {
           <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
             TraumaScore
           </h1>
-          <p className="text-purple-200 text-lg mb-8 leading-relaxed">
+          <p className="text-purple-200 text-lg mb-6 leading-relaxed">
             Scopri quanto sei "damaged" con questo quiz scientificamente
             discutibile
           </p>
+
+          {/* Sezione partecipanti */}
+          {totalParticipants !== null && (
+            <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-sm rounded-2xl p-5 mb-6 border border-white/30 shadow-lg">
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <div className="text-2xl">✨</div>
+                <div className="text-white font-medium text-base">
+                  Community dei Sopravvissuti
+                </div>
+                <div className="text-2xl">✨</div>
+              </div>
+              <div className="text-center text-purple-100 text-sm leading-relaxed">
+                {getParticipantsMessage(totalParticipants)}
+              </div>
+            </div>
+          )}
+
           <button
             onClick={() => setCurrentStep("quiz")}
             className="bg-white text-purple-900 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
