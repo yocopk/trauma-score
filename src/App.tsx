@@ -505,26 +505,15 @@ function App() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={`text-gray-800 leading-relaxed transition-colors duration-200 ${
-                        selectedItems.has(item.id)
-                          ? "text-purple-900 font-medium"
-                          : ""
-                      }`}
-                    >
-                      {item.text}
-                    </span>
-                    <div
-                      className={`ml-3 px-2 py-1 rounded-full text-xs font-bold transition-all duration-300 ${
-                        selectedItems.has(item.id)
-                          ? "bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-md"
-                          : "bg-gray-200 text-gray-600 group-hover:bg-purple-100 group-hover:text-purple-700"
-                      }`}
-                    >
-                      +{item.points}
-                    </div>
-                  </div>
+                  <span
+                    className={`text-gray-800 leading-relaxed transition-colors duration-200 ${
+                      selectedItems.has(item.id)
+                        ? "text-purple-900 font-medium"
+                        : ""
+                    }`}
+                  >
+                    {item.text}
+                  </span>
                 </div>
 
                 {/* Indicator di selezione */}
