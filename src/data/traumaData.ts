@@ -10,7 +10,7 @@ export interface Category {
   items: TraumaItem[];
 }
 
-//Actual total points calculation = 1139
+//Actual total points calculation = 1146
 export const traumaData: Category[] = [
   {
     id: "famiglia",
@@ -77,6 +77,11 @@ export const traumaData: Category[] = [
         id: "senza-casa-propria",
         text: "Sei stato senza una casa stabile per lunghi periodi",
         points: 8,
+      },
+      {
+        id: "visto-genitori-sesso",
+        text: "Hai visto i tuoi genitori fare sesso",
+        points: 7,
       },
     ],
   },
