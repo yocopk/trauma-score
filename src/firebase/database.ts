@@ -1,19 +1,6 @@
 import { collection, addDoc, getDocs, query } from "firebase/firestore";
 import { db } from "./config";
-
-export interface QuizAnswer {
-  itemId: string;
-  categoryId: string;
-  text: string;
-  points: number;
-}
-
-export interface QuizResult {
-  id?: string;
-  answers: QuizAnswer[];
-  totalPoints: number;
-  completedAt: Date;
-}
+import type { QuizAnswer, QuizResult } from "../types/quiz";
 
 export async function saveQuizResult(
   answers: QuizAnswer[],

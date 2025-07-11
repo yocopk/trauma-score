@@ -4,8 +4,9 @@ import {
   saveQuizResult,
   getAverageScore,
   getTotalParticipants,
-  type QuizAnswer,
 } from "./firebase/database";
+import type { QuizAnswer } from "./types/quiz";
+import { getScoreMessage, getParticipantsMessage } from "./utils/messages";
 import {
   ArrowLeft,
   ArrowRight,
@@ -15,88 +16,6 @@ import {
   RotateCcw,
   Target,
 } from "lucide-react";
-
-const getScoreMessage = (score: number): string => {
-  switch (true) {
-    case score === 0:
-      return "Wow, sei praticamente invincibile! Oppure hai mentito... 🤔";
-    case score <= 10:
-      return "Vita abbastanza tranquilla, complimenti! 🌈";
-    case score <= 20:
-      return "Tutto sommato potresti stare peggio! 😌";
-    case score <= 30:
-      return "Qualche botta ma niente di grave 💪";
-    case score <= 40:
-      return "Beh, almeno non sei l'unico con qualche problemino... 😅";
-    case score <= 50:
-      return "Inizia a farsi interessante la situazione 🤨";
-    case score <= 60:
-      return "Congratulazioni! Sei ufficialmente 'damaged' 🎉";
-    case score <= 70:
-      return "Il trauma è forte in questo... 🌪️";
-    case score <= 80:
-      return "A questo punto dovresti scrivere un libro sulla resilienza 📚";
-    case score <= 90:
-      return "Sei un sopravvissuto professionista 🏆";
-    case score <= 100:
-      return "Ok, forse è ora di chiamare un terapeuta... o cinque 🧠";
-    case score <= 110:
-      return "Livello 'Ho visto cose che voi umani...' raggiunto 👁️";
-    case score <= 120:
-      return "Plot armor activated! Come fai ad essere ancora qui? 🛡️";
-    case score <= 130:
-      return "Sei diventato immune al dolore per pura abitudine 💉";
-    case score <= 140:
-      return "Il trauma ti ha dato superpoteri, evidentemente 🦸‍♂️";
-    case score <= 150:
-      return "Sei letteralmente un anime protagonist. Rispetto! 🔥";
-    case score <= 160:
-      return "A questo punto il trauma è il tuo spirit animal 🐺";
-    case score <= 170:
-      return "Hai collezionato traumi come fossero Pokemon 🎮";
-    case score <= 180:
-      return "Il tuo CV di sopravvivenza è impressionante 📜";
-    case score <= 190:
-      return "Sei la definizione vivente di 'character development' 📖";
-    case score <= 200:
-      return "A questo punto sei immortale per puro dispetto 😈";
-    case score <= 220:
-      return "Hai raggiunto l'illuminazione tramite sofferenza 🧘‍♂️";
-    case score <= 250:
-      return "Sei diventato una leggenda metropolitana 🏛️";
-    case score <= 300:
-      return "Il trauma ti deve dei soldi a questo punto 💸";
-    default:
-      return "Hai sbloccato il trauma infinito. Achievement unlocked! 🏅✨";
-  }
-};
-
-const getParticipantsMessage = (count: number): string => {
-  switch (true) {
-    case count === 0:
-      return "Sii il primo coraggioso a scoprire il tuo trauma score! 🏆";
-    case count === 1:
-      return "1 persona ha già scoperto quanto è danneggiata 😅";
-    case count <= 5:
-      return `${count} persone hanno già confessato i loro traumi 🤝`;
-    case count <= 10:
-      return `${count} anime coraggiose si sono già messe a nudo 💪`;
-    case count <= 25:
-      return `${count} danneggiati si sono già uniti al club! 🎭`;
-    case count <= 50:
-      return `${count} persone hanno già scoperto di essere più traumatizzate di quanto pensassero 😱`;
-    case count <= 100:
-      return `${count} sopravvissuti hanno già condiviso le loro cicatrici 🏅`;
-    case count <= 250:
-      return `${count} guerrieri del trauma si sono già fatti avanti! ⚔️`;
-    case count <= 500:
-      return `${count} leggende del trauma hanno già lasciato il segno 🔥`;
-    case count <= 1000:
-      return `${count} eroi danneggiati nella nostra hall of fame! 🏛️`;
-    default:
-      return `${count} persone hanno già scoperto il loro livello di trauma. Unisciti all'esercito dei danneggiati! 🚀`;
-  }
-};
 
 function App() {
   const [currentStep, setCurrentStep] = useState<

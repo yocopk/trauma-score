@@ -10,6 +10,7 @@ export interface Category {
   items: TraumaItem[];
 }
 
+//Actual total points calculation = 1139
 export const traumaData: Category[] = [
   {
     id: "famiglia",
