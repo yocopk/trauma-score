@@ -4,17 +4,18 @@ import type { QuizAnswer, QuizResult } from "../types/quiz";
 
 export async function saveQuizResult(
   answers: QuizAnswer[],
-  totalPoints: number
+  totalPoints: number,
+  locale: string = "it"
 ): Promise<string> {
   try {
     const quizResult: Omit<QuizResult, "id"> = {
       answers,
       totalPoints,
+      locale,
       completedAt: new Date(),
     };
 
     const docRef = await addDoc(collection(db, "quiz-results"), quizResult);
-    console.log("Quiz result saved with ID: ", docRef.id);
     return docRef.id;
   } catch (error) {
     console.error("Error saving quiz result: ", error);

@@ -1,1 +1,107 @@
 @import "tailwindcss";
+
+/* Custom animations for checkbox interactions */
+@keyframes scale-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-down {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out both;
+}
+
+.animate-slide-in-down {
+  animation: slide-in-down 0.6s ease-out;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Smooth hover effects for better UX */
+.group:hover .transition-transform {
+  transform: translateX(2px);
+}
+
+/* Custom purple gradient backgrounds */
+.bg-purple-25 {
+  background-color: #faf7ff;
+}
+
+.bg-indigo-25 {
+  background-color: #f8faff;
+}
+
+/* Custom shadow effects */
+.shadow-purple {
+  box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.15);
+}
+
+.shadow-purple-lg {
+  box-shadow: 0 10px 25px -3px rgba(139, 92, 246, 0.2),
+    0 4px 6px -2px rgba(139, 92, 246, 0.1);
+}
+
+.shadow-indigo {
+  box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.15);
+}
+
+/* Glass morphism effect */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

@@ -7,14 +7,19 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "migrate:locale": "node scripts/migrate-locale.js",
+    "i18n:validate": "node scripts/i18n-utils.js validate",
+    "i18n:generate": "node scripts/i18n-utils.js generate"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
     "firebase": "^11.10.0",
+    "i18next": "^25.3.2",
     "lucide-react": "^0.525.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-i18next": "^15.6.0",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {

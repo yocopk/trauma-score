@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { traumaData } from "./data/traumaData";
+import { useTranslation } from "react-i18next";
+import { useTraumaData } from "./hooks/useTraumaData";
+import { useTraumaMessages } from "./hooks/useTraumaMessages";
+import LanguageSelector from "./components/LanguageSelector";
 import {
   saveQuizResult,
   getAverageScore,
   getTotalParticipants,
 } from "./firebase/database";
 import type { QuizAnswer } from "./types/quiz";
-import { getScoreMessage, getParticipantsMessage } from "./utils/messages";
 import {
   ArrowLeft,
   ArrowRight,
@@ -18,6 +20,10 @@ import {
 } from "lucide-react";
 
 function App() {
+  const { t, i18n } = useTranslation();
+  const traumaData = useTraumaData();
+  const { getScoreMessage, getParticipantsMessage } = useTraumaMessages();
+
   const [currentStep, setCurrentStep] = useState<
     "welcome" | "quiz" | "results"
   >("welcome");
@@ -38,11 +44,11 @@ function App() {
         const count = await getTotalParticipants();
         setTotalParticipants(count);
       } catch (error) {
-        console.error("Errore nel caricare i partecipanti:", error);
+        console.error(t("errors.loadParticipants"), error);
       }
     };
     loadParticipants();
-  }, []);
+  }, [t]);
 
   const handleItemToggle = (itemId: string, points: number) => {
     const newSelected = new Set(selectedItems);
@@ -84,8 +90,7 @@ function App() {
         });
 
         // Salva su Firestore e calcola la media
-        await saveQuizResult(answers, totalScore);
-        console.log("Quiz salvato con successo!");
+        await saveQuizResult(answers, totalScore, i18n.language);
 
         // Calcola la media di tutti i punteggi
         const average = await getAverageScore();
@@ -95,10 +100,7 @@ function App() {
         const newCount = await getTotalParticipants();
         setTotalParticipants(newCount);
       } catch (error) {
-        console.error(
-          "Errore nel salvare il quiz o calcolare la media:",
-          error
-        );
+        console.error(t("errors.saveQuiz"), error);
         // Continua comunque alla pagina dei risultati anche se qualcosa fallisce
       } finally {
         setIsLoading(false);
@@ -139,28 +141,28 @@ function App() {
       }
     });
 
-    const shareText = `🎯 Il mio TraumaScore: ${totalScore}\n\n${getScoreMessage(
-      totalScore
-    )}\n\nLe mie risposte:${categoryText}\n\n#TraumaScore`;
+    const shareText = t("shareModal.shareText", {
+      score: totalScore,
+      message: getScoreMessage(totalScore),
+      answers: categoryText,
+    });
 
     return shareText;
   };
 
   const handleShare = () => {
-    console.log("handleShare called"); // Debug
     setShowShareModal(true);
-    console.log("showShareModal set to true"); // Debug
   };
 
   const copyToClipboard = async () => {
     const shareText = generateShareText();
     try {
       await navigator.clipboard.writeText(shareText);
-      alert("Risultato copiato negli appunti! 📋");
+      alert(t("shareModal.copyAlert"));
       setShowShareModal(false);
     } catch {
       // Se la clipboard non funziona, mostra il testo in un prompt
-      prompt("Copia questo testo per condividerlo:", shareText);
+      prompt(t("shareModal.copyFallback"), shareText);
     }
   };
 
@@ -169,6 +171,9 @@ function App() {
   if (currentStep === "welcome") {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 to-indigo-900 flex flex-col items-center justify-center p-4">
+        {/* Language Selector */}
+        <LanguageSelector />
+
         {/* Sezione link social in alto */}
         <div className="absolute top-4 right-4 flex space-x-3">
           <a
@@ -210,11 +215,10 @@ function App() {
 
         <div className="text-center max-w-md mx-auto">
           <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-            TraumaScore
+            {t("welcome.title")}
           </h1>
           <p className="text-purple-200 text-lg mb-6 leading-relaxed">
-            Scopri quanto sei "damaged" con questo quiz scientificamente
-            discutibile
+            {t("welcome.subtitle")}
           </p>
 
           {/* Sezione partecipanti */}
@@ -223,7 +227,7 @@ function App() {
               <div className="flex items-center justify-center gap-3 mb-3">
                 <div className="text-2xl">✨</div>
                 <div className="text-white font-medium text-base">
-                  Community dei Sopravvissuti
+                  {t("welcome.communityTitle")}
                 </div>
                 <div className="text-2xl">✨</div>
               </div>
@@ -237,7 +241,7 @@ function App() {
             onClick={() => setCurrentStep("quiz")}
             className="bg-white text-purple-900 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
           >
-            Inizia il Test
+            {t("welcome.startButton")}
           </button>
         </div>
       </div>
@@ -252,11 +256,9 @@ function App() {
             <div className="text-center">
               <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
               <h2 className="text-2xl font-bold text-purple-900 mb-2">
-                Elaborazione risultati...
+                {t("results.loading.title")}
               </h2>
-              <p className="text-gray-600">
-                Stiamo salvando i tuoi dati e calcolando le statistiche
-              </p>
+              <p className="text-gray-600">{t("results.loading.subtitle")}</p>
             </div>
           </div>
         </div>
@@ -269,7 +271,7 @@ function App() {
           <div className="bg-white rounded-3xl p-8 max-w-md mx-auto shadow-2xl">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-purple-900 mb-4">
-                Il tuo Trauma Score
+                {t("results.title")}
               </h2>
               <div className="text-6xl font-bold text-purple-600 mb-4">
                 {totalScore}
@@ -279,21 +281,21 @@ function App() {
               {averageScore !== null && (
                 <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl p-4 mb-4 border-2 border-purple-200">
                   <div className="text-sm text-purple-600 mb-1 font-medium">
-                    📊 Confronto con gli altri danneggiati
+                    {t("results.comparison.title")}
                   </div>
                   <div className="text-2xl font-bold text-purple-700 mb-2">
-                    Media: {averageScore}
+                    {t("results.comparison.average")}: {averageScore}
                   </div>
                   <div className="text-sm text-purple-600">
                     {totalScore > averageScore
-                      ? `Complimenti! Sei +${
-                          totalScore - averageScore
-                        } punti più traumatizzato della media! 🏆`
+                      ? t("results.comparison.aboveAverage", {
+                          diff: totalScore - averageScore,
+                        })
                       : totalScore < averageScore
-                      ? `Tranquillo, ti mancano solo ${
-                          averageScore - totalScore
-                        } punti per raggiungere la media dei traumi! 🎯`
-                      : "Sei perfettamente nella media del trauma! Che coincidenza! ✨"}
+                      ? t("results.comparison.belowAverage", {
+                          diff: averageScore - totalScore,
+                        })
+                      : t("results.comparison.exactAverage")}
                   </div>
                 </div>
               )}
@@ -307,14 +309,14 @@ function App() {
                   className="w-full bg-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
                 >
                   <Share className="w-5 h-5" />
-                  Condividi Risultato {showShareModal ? "(APERTA)" : ""}
+                  {t("results.shareButton")} {showShareModal ? "(APERTA)" : ""}
                 </button>
                 <button
                   onClick={handleRestart}
                   className="w-full bg-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
                 >
                   <RotateCcw className="w-5 h-5" />
-                  Ricomincia
+                  {t("results.restartButton")}
                 </button>
               </div>
             </div>
@@ -338,7 +340,7 @@ function App() {
                 <div className="flex justify-between items-center">
                   <h3 className="text-xl font-bold text-purple-900 flex items-center gap-2">
                     <Target className="w-5 h-5" />
-                    Il tuo risultato
+                    {t("shareModal.title")}
                   </h3>
                   <button
                     onClick={() => setShowShareModal(false)}
@@ -363,7 +365,7 @@ function App() {
 
                 <div className="space-y-4">
                   <h4 className="font-semibold text-gray-800 border-b pb-2">
-                    Le tue risposte:
+                    {t("shareModal.answersTitle")}
                   </h4>
 
                   {traumaData.map((category) => {
@@ -407,14 +409,14 @@ function App() {
                     className="w-full bg-green-600 text-white py-3 rounded-full font-semibold hover:bg-green-700 transition-colors duration-200 flex items-center justify-center gap-2"
                   >
                     <Copy className="w-5 h-5" />
-                    Copia Risultato
+                    {t("shareModal.copyButton")}
                   </button>
                   <button
                     onClick={() => setShowShareModal(false)}
                     className="w-full bg-gray-300 text-gray-700 py-3 rounded-full font-semibold hover:bg-gray-400 transition-colors duration-200 flex items-center justify-center gap-2"
                   >
                     <X className="w-5 h-5" />
-                    Chiudi
+                    {t("shareModal.closeButton")}
                   </button>
                 </div>
               </div>
@@ -430,10 +432,13 @@ function App() {
       <div className="max-w-md mx-auto">
         {/* Header */}
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-white mb-2">TraumaScore</h1>
+          <h1 className="text-2xl font-bold text-white mb-2">
+            {t("welcome.title")}
+          </h1>
           <div className="flex justify-center items-center space-x-2 text-purple-200">
             <span className="text-sm">
-              {currentCategoryIndex + 1} / {traumaData.length}
+              {currentCategoryIndex + 1} {t("quiz.progressLabel")}{" "}
+              {traumaData.length}
             </span>
             <div className="w-32 bg-purple-800 rounded-full h-2">
               <div
@@ -454,23 +459,78 @@ function App() {
             {currentCategory.title}
           </h2>
 
-          <div className="space-y-4">
-            {currentCategory.items.map((item) => (
+          <div className="space-y-3">
+            {currentCategory.items.map((item, index) => (
               <label
                 key={item.id}
-                className="flex items-start space-x-3 cursor-pointer p-3 rounded-xl hover:bg-purple-50 transition-colors duration-200"
+                className={`group relative flex items-start space-x-4 cursor-pointer p-4 rounded-2xl border-2 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-purple animate-fade-in-up ${
+                  selectedItems.has(item.id)
+                    ? "bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-300 shadow-purple"
+                    : "bg-gray-50 border-gray-200 hover:border-purple-200 hover:bg-purple-25"
+                }`}
+                style={{
+                  animationDelay: `${index * 100}ms`,
+                }}
               >
-                <input
-                  type="checkbox"
-                  checked={selectedItems.has(item.id)}
-                  onChange={() => handleItemToggle(item.id, item.points)}
-                  className="mt-1 w-5 h-5 text-purple-600 border-2 border-purple-300 rounded focus:outline-none"
-                />
-                <div className="flex-1">
-                  <span className="text-gray-800 leading-relaxed">
-                    {item.text}
-                  </span>
+                <div className="relative mt-1">
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.has(item.id)}
+                    onChange={() => handleItemToggle(item.id, item.points)}
+                    className="sr-only"
+                  />
+                  <div
+                    className={`w-6 h-6 rounded-lg border-2 transition-all duration-300 flex items-center justify-center ${
+                      selectedItems.has(item.id)
+                        ? "bg-gradient-to-br from-purple-500 to-indigo-600 border-purple-500 shadow-lg"
+                        : "bg-white border-gray-300 group-hover:border-purple-400"
+                    }`}
+                  >
+                    {selectedItems.has(item.id) && (
+                      <svg
+                        className="w-4 h-4 text-white animate-scale-in"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={3}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    )}
+                  </div>
                 </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`text-gray-800 leading-relaxed transition-colors duration-200 ${
+                        selectedItems.has(item.id)
+                          ? "text-purple-900 font-medium"
+                          : ""
+                      }`}
+                    >
+                      {item.text}
+                    </span>
+                    <div
+                      className={`ml-3 px-2 py-1 rounded-full text-xs font-bold transition-all duration-300 ${
+                        selectedItems.has(item.id)
+                          ? "bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-md"
+                          : "bg-gray-200 text-gray-600 group-hover:bg-purple-100 group-hover:text-purple-700"
+                      }`}
+                    >
+                      +{item.points}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Indicator di selezione */}
+                {selectedItems.has(item.id) && (
+                  <div className="absolute top-2 right-2 w-3 h-3 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full animate-pulse shadow-lg"></div>
+                )}
               </label>
             ))}
           </div>
@@ -484,7 +544,7 @@ function App() {
                   className="flex-1 bg-gray-500 text-white py-4 rounded-full font-semibold text-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
                 >
                   <ArrowLeft className="w-5 h-5" />
-                  Indietro
+                  {t("quiz.backButton")}
                 </button>
               )}
               <button
@@ -495,11 +555,11 @@ function App() {
               >
                 {currentCategoryIndex < traumaData.length - 1 ? (
                   <>
-                    Avanti
+                    {t("quiz.nextButton")}
                     <ArrowRight className="w-5 h-5" />
                   </>
                 ) : (
-                  <>Vedi Risultato</>
+                  <>{t("quiz.resultsButton")}</>
                 )}
               </button>
             </div>

@@ -9,5 +9,6 @@ export interface QuizResult {
   id?: string;
   answers: QuizAnswer[];
   totalPoints: number;
+  locale: string;
   completedAt: Date;
 }
