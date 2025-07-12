@@ -35,7 +35,7 @@
     "closeButton": "Chiudi",
     "copyAlert": "Risultato copiato negli appunti! 📋",
     "copyFallback": "Copia questo testo per condividerlo:",
-    "shareText": "🎯 Il mio TraumaScore: {{score}}\\n\\n{{message}}\\n\\nLe mie risposte:{{answers}}\\n\\n#TraumaScore"
+    "shareText": "🎯 Il mio TraumaScore: {{score}}\n\n{{message}}\n\nLe mie risposte:{{answers}}\n\n#TraumaScore"
   },
   "categories": {
     "famiglia": "👨‍👩‍👧‍👦 Famiglia & Infanzia",
