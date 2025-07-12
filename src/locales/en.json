@@ -9,7 +9,8 @@
     "progressLabel": "of",
     "backButton": "Back",
     "nextButton": "Next",
-    "resultsButton": "See Results"
+    "resultsButton": "See Results",
+    "currentScore": "Current Score"
   },
   "results": {
     "loading": {
@@ -215,5 +216,13 @@
   "errors": {
     "loadParticipants": "Error loading participants:",
     "saveQuiz": "Error saving quiz or calculating average:"
+  },
+  "validation": {
+    "minimumScore": "You need at least 50 points to submit the quiz. Your current score: {{score}}",
+    "maximumScore": "Maximum score exceeded! This seems suspicious...",
+    "submitDisabled": "Not enough trauma to submit (minimum: 50 points)",
+    "suspiciousPattern": "Warning: {{percentage}}% of your answers ({{count}} items) are high-trauma events. This seems unusual. Are you sure you want to continue?",
+    "perfectScore": "Perfect score detected! This is not allowed.",
+    "highScoreWarning": "It seems you've accumulated a lot of traumas. Are you sure you haven't cheated?"
   }
 }

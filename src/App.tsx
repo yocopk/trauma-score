@@ -19,6 +19,11 @@ import {
   Target,
 } from "lucide-react";
 
+// Validation constants
+const MIN_SCORE = 50;
+const MAX_SCORE = 1146; // Total possible points from traumaData
+const HIGH_SCORE_THRESHOLD = 400; // Threshold for suspicious high scores
+
 function App() {
   const { t, i18n } = useTranslation();
   const traumaData = useTraumaData();
@@ -69,28 +74,67 @@ function App() {
     if (currentCategoryIndex < traumaData.length - 1) {
       setCurrentCategoryIndex((prev) => prev + 1);
     } else {
+      // Validazione prima del submit
+      if (totalScore < MIN_SCORE) {
+        alert(t("validation.minimumScore", { score: totalScore }));
+        return;
+      }
+
+      // Punteggio perfetto non consentito
+      if (totalScore === MAX_SCORE) {
+        alert(t("validation.perfectScore"));
+        return;
+      }
+
+      // Punteggio alto sospetto - chiedi conferma
+      if (totalScore >= HIGH_SCORE_THRESHOLD) {
+        if (!confirm(t("validation.highScoreWarning", { score: totalScore }))) {
+          return;
+        }
+      }
+
+      // Controllo anti-furbizia: verifica se troppi item ad alto punteggio sono selezionati
+      const selectedAnswers: QuizAnswer[] = [];
+      traumaData.forEach((category) => {
+        category.items.forEach((item) => {
+          if (selectedItems.has(item.id)) {
+            selectedAnswers.push({
+              itemId: item.id,
+              categoryId: category.id,
+              text: item.text,
+              points: item.points,
+            });
+          }
+        });
+      });
+
+      // Conta gli item con punteggi molto alti (>= 15 punti)
+      const highScoreItems = selectedAnswers.filter(
+        (item) => item.points >= 15
+      );
+      const totalHighScorePercentage =
+        (highScoreItems.length / selectedAnswers.length) * 100;
+
+      // Se più del 60% delle risposte sono ad alto punteggio, è sospetto
+      if (selectedAnswers.length > 10 && totalHighScorePercentage > 60) {
+        if (
+          !confirm(
+            t("validation.suspiciousPattern", {
+              percentage: Math.round(totalHighScorePercentage),
+              count: highScoreItems.length,
+            })
+          )
+        ) {
+          return;
+        }
+      }
+
       // Quiz completato - mostra loading
       setIsLoading(true);
 
       try {
-        const answers: QuizAnswer[] = [];
-
-        // Raccogli tutte le risposte selezionate
-        traumaData.forEach((category) => {
-          category.items.forEach((item) => {
-            if (selectedItems.has(item.id)) {
-              answers.push({
-                itemId: item.id,
-                categoryId: category.id,
-                text: item.text,
-                points: item.points,
-              });
-            }
-          });
-        });
-
         // Salva su Firestore e calcola la media
-        await saveQuizResult(answers, totalScore, i18n.language);
+        await saveQuizResult(selectedAnswers, totalScore, i18n.language);
 
         // Calcola la media di tutti i punteggi
         const average = await getAverageScore();
@@ -515,16 +559,34 @@ function App() {
                     {item.text}
                   </span>
                 </div>
-
-                {/* Indicator di selezione */}
-                {selectedItems.has(item.id) && (
-                  <div className="absolute top-2 right-2 w-3 h-3 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full animate-pulse shadow-lg"></div>
-                )}
               </label>
             ))}
           </div>
 
           <div className="space-y-4 mt-8">
+            {/* Avviso validazione solo se necessario */}
+            {currentCategoryIndex === traumaData.length - 1 && (
+              <div className="text-center">
+                {totalScore < MIN_SCORE && (
+                  <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                    {t("validation.submitDisabled")}
+                  </div>
+                )}
+                {totalScore === MAX_SCORE && (
+                  <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                    {t("validation.perfectScore")}
+                  </div>
+                )}
+                {totalScore >= HIGH_SCORE_THRESHOLD &&
+                  totalScore !== MAX_SCORE && (
+                    <div className="text-sm text-orange-600 bg-orange-50 border border-orange-200 rounded-lg p-3 mb-4">
+                      ⚠️{" "}
+                      {t("validation.highScoreWarning", { score: totalScore })}
+                    </div>
+                  )}
+              </div>
+            )}
+
             {/* Pulsanti di navigazione */}
             <div className="flex space-x-3">
               {currentCategoryIndex > 0 && (
@@ -538,9 +600,16 @@ function App() {
               )}
               <button
                 onClick={handleNext}
-                className={`${
-                  currentCategoryIndex > 0 ? "flex-1" : "w-full"
-                } bg-purple-600 text-white py-4 rounded-full font-semibold text-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2`}
+                disabled={
+                  currentCategoryIndex === traumaData.length - 1 &&
+                  (totalScore < MIN_SCORE || totalScore === MAX_SCORE)
+                }
+                className={`${currentCategoryIndex > 0 ? "flex-1" : "w-full"} ${
+                  currentCategoryIndex === traumaData.length - 1 &&
+                  (totalScore < MIN_SCORE || totalScore === MAX_SCORE)
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-purple-600 hover:bg-purple-700 hover:scale-105"
+                } text-white py-4 rounded-full font-semibold text-lg transition-all duration-300 transform shadow-lg flex items-center justify-center gap-2`}
               >
                 {currentCategoryIndex < traumaData.length - 1 ? (
                   <>

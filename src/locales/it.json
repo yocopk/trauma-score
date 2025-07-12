@@ -9,7 +9,8 @@
     "progressLabel": "di",
     "backButton": "Indietro",
     "nextButton": "Avanti",
-    "resultsButton": "Vedi Risultato"
+    "resultsButton": "Vedi Risultati",
+    "currentScore": "Punteggio Attuale"
   },
   "results": {
     "loading": {
@@ -215,5 +216,13 @@
   "errors": {
     "loadParticipants": "Errore nel caricare i partecipanti:",
     "saveQuiz": "Errore nel salvare il quiz o calcolare la media:"
+  },
+  "validation": {
+    "minimumScore": "Hai bisogno di almeno 50 punti per inviare il quiz. Il tuo punteggio attuale: {{score}}",
+    "maximumScore": "Punteggio massimo superato! Questo sembra sospetto...",
+    "submitDisabled": "Non abbastanza trauma per inviare (minimo: 50 punti)",
+    "suspiciousPattern": "Attenzione: {{percentage}}% delle tue risposte ({{count}} elementi) sono eventi ad alto trauma. Questo sembra insolito. Sei sicuro di voler continuare?",
+    "perfectScore": "Punteggio perfetto rilevato! Non è consentito.",
+    "highScoreWarning": "Sembra che tu abbia accumulato davvero tanti traumi. Sei sicuro di non aver barato?"
   }
 }
