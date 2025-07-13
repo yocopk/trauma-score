@@ -5,6 +5,24 @@
     "communityTitle": "Community dei Sopravvissuti",
     "startButton": "Inizia il Test"
   },
+  "nickname": {
+    "button": "Scegli un nickname per entrare in classifica",
+    "placeholder": "Inserisci il tuo nickname...",
+    "hint": "Minimo 2 caratteri, massimo 12",
+    "separator": "--- oppure ---",
+    "success": "Nickname '{{nickname}}' impostato con successo! 🎯",
+    "edit": "Modifica nickname",
+    "remove": "Rimuovi nickname",
+    "checking": "Controllo disponibilità...",
+    "errors": {
+      "tooShort": "Il nickname deve essere di almeno 2 caratteri",
+      "tooLong": "Il nickname non può superare i 12 caratteri",
+      "noSpaces": "Il nickname non può contenere spazi",
+      "onlyNumbers": "Il nickname non può contenere solo numeri",
+      "inappropriate": "Il nickname contiene contenuti inappropriati",
+      "taken": "Nickname già in uso, scegline un altro"
+    }
+  },
   "quiz": {
     "progressLabel": "di",
     "backButton": "Indietro",
@@ -224,5 +242,13 @@
     "suspiciousPattern": "Attenzione: {{percentage}}% delle tue risposte ({{count}} elementi) sono eventi ad alto trauma. Questo sembra insolito. Sei sicuro di voler continuare?",
     "perfectScore": "Punteggio perfetto rilevato! Non è consentito.",
     "highScoreWarning": "Sembra che tu abbia accumulato davvero tanti traumi. Sei sicuro di non aver barato?"
+  },
+  "leaderboard": {
+    "title": "Classifica Globale",
+    "subtitle": "Top 10 dei più traumatizzati",
+    "loading": "Caricamento classifica...",
+    "empty": "Nessuno ha ancora gareggiato nella classifica!",
+    "points": "punti",
+    "button": "Vedi Classifica"
   }
 }
