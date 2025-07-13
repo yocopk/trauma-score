@@ -11,4 +11,12 @@ export interface QuizResult {
   totalPoints: number;
   locale: string;
   completedAt: Date;
+  nickname?: string; // Campo opzionale per la classifica
+}
+
+export interface LeaderboardEntry {
+  nickname: string;
+  totalPoints: number;
+  completedAt: Date;
+  locale: string;
 }

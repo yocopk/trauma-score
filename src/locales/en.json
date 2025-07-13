@@ -224,5 +224,31 @@
     "suspiciousPattern": "Warning: {{percentage}}% of your answers ({{count}} items) are high-trauma events. This seems unusual. Are you sure you want to continue?",
     "perfectScore": "Perfect score detected! This is not allowed.",
     "highScoreWarning": "It seems you've accumulated a lot of traumas. Are you sure you haven't cheated?"
+  },
+  "nickname": {
+    "button": "Choose a nickname to enter the leaderboard",
+    "placeholder": "Enter your nickname...",
+    "hint": "Minimum 2 characters, maximum 12",
+    "separator": "--- or ---",
+    "success": "Nickname '{{nickname}}' set successfully! 🎯",
+    "edit": "Edit nickname",
+    "remove": "Remove nickname",
+    "checking": "Checking availability...",
+    "errors": {
+      "tooShort": "Nickname must be at least 2 characters",
+      "tooLong": "Nickname cannot exceed 12 characters",
+      "noSpaces": "Nickname cannot contain spaces",
+      "onlyNumbers": "Nickname cannot contain only numbers",
+      "inappropriate": "Nickname contains inappropriate content",
+      "taken": "Nickname already taken, choose another one"
+    }
+  },
+  "leaderboard": {
+    "title": "Global Leaderboard",
+    "subtitle": "Top 10 most traumatized",
+    "loading": "Loading leaderboard...",
+    "empty": "No one has competed in the leaderboard yet!",
+    "points": "points",
+    "button": "View Leaderboard"
   }
 }

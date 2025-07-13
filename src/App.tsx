@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useTraumaData } from "./hooks/useTraumaData";
 import { useTraumaMessages } from "./hooks/useTraumaMessages";
 import LanguageSelector from "./components/LanguageSelector";
+import NicknameInput from "./components/NicknameInput";
+import LeaderboardModal from "./components/LeaderboardModal";
 import {
   saveQuizResult,
   getAverageScore,
@@ -17,6 +19,7 @@ import {
   Share,
   RotateCcw,
   Target,
+  Trophy,
 } from "lucide-react";
 
 // Validation constants
@@ -41,6 +44,8 @@ function App() {
   const [totalParticipants, setTotalParticipants] = useState<number | null>(
     null
   );
+  const [nickname, setNickname] = useState<string>("");
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   // Carica il numero di partecipanti all'avvio
   useEffect(() => {
@@ -133,8 +138,28 @@ function App() {
       setIsLoading(true);
 
       try {
+        // Se c'è un nickname, salva anche in localStorage
+        if (nickname) {
+          const quizData = {
+            answers: selectedAnswers,
+            totalPoints: totalScore,
+            locale: i18n.language,
+            nickname,
+            completedAt: new Date().toISOString(),
+          };
+          localStorage.setItem(
+            "trauma-score-last-result",
+            JSON.stringify(quizData)
+          );
+        }
+
         // Salva su Firestore e calcola la media
-        await saveQuizResult(selectedAnswers, totalScore, i18n.language);
+        await saveQuizResult(
+          selectedAnswers,
+          totalScore,
+          i18n.language,
+          nickname || undefined
+        );
 
         // Calcola la media di tutti i punteggi
         const average = await getAverageScore();
@@ -168,6 +193,9 @@ function App() {
     setSelectedItems(new Set());
     setTotalScore(0);
     setAverageScore(null);
+    setNickname("");
+    // Rimuovi i dati del quiz precedente dal localStorage
+    localStorage.removeItem("trauma-score-last-result");
   };
 
   const generateShareText = () => {
@@ -283,11 +311,29 @@ function App() {
 
           <button
             onClick={() => setCurrentStep("quiz")}
-            className="bg-white text-purple-900 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
+            className="bg-white text-purple-900 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-50 transition-all duration-300 transform hover:scale-105 shadow-lg mb-6"
           >
             {t("welcome.startButton")}
           </button>
+
+          {/* Sezione nickname per classifica */}
+          <NicknameInput onNicknameSet={setNickname} />
+
+          {/* Bottone classifica */}
+          <button
+            onClick={() => setShowLeaderboard(true)}
+            className="bg-yellow-600 text-white px-6 py-3 rounded-full font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2 mx-auto"
+          >
+            <Trophy className="w-5 h-5" />
+            {t("leaderboard.button")}
+          </button>
         </div>
+
+        {/* Modal classifica */}
+        <LeaderboardModal
+          isOpen={showLeaderboard}
+          onClose={() => setShowLeaderboard(false)}
+        />
       </div>
     );
   }
@@ -365,7 +411,36 @@ function App() {
               </div>
             </div>
           </div>
+
+          {/* Sezione classifica se l'utente ha un nickname */}
+          {nickname && (
+            <div className="bg-white rounded-3xl p-6 max-w-md mx-auto shadow-2xl mt-6">
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-purple-900 mb-4 flex items-center justify-center gap-2">
+                  <Trophy className="w-6 h-6 text-yellow-500" />
+                  {t("leaderboard.title")}
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Il tuo punteggio è stato registrato nella classifica come{" "}
+                  <strong>{nickname}</strong>!
+                </p>
+                <button
+                  onClick={() => setShowLeaderboard(true)}
+                  className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-full font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2 mx-auto"
+                >
+                  <Trophy className="w-5 h-5" />
+                  {t("leaderboard.button")}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
+
+        {/* Modal classifica */}
+        <LeaderboardModal
+          isOpen={showLeaderboard}
+          onClose={() => setShowLeaderboard(false)}
+        />
 
         {/* Modale di condivisione - spostata qui per essere sempre visibile */}
         {showShareModal && (
